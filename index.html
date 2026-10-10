@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akses Eksklusif - Sukses TKA 2026</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-image: url('https://nafiszain90-gif.github.io/asas/suksestka.png');
+	background-repeat: repeat; 
+	background-size: 100px auto;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .login-container, #secret-page {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(80px);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 650px;
+            text-align: center;
+        }
+
+        h2, h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        input[type="text"]::placeholder {
+            color: #bbb;
+            letter-spacing: normal;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #ff7b00;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #e06d00;
+        }
+
+        .error-msg {
+            margin-top: 15px;
+            color: #ff4d4d;
+            font-size: 13px;
+            display: none;
+        }
+
+        #secret-page {
+            display: none;
+            max-width: 600px;
+        }
+
+        #secret-page h1 {
+            color: #00ffcc;
+        }
+
+        .logout-btn {
+            margin-top: 20px;
+            background: #ff4d4d;
+            width: auto;
+            padding: 10px 20px;
+        }
+        .logout-btn:hover {
+            background: #cc0000;
+        }
+        
+        .code-info {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #00ffcc;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<script>
+        // 1. Menonaktifkan Klik Kanan
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 2. Menonaktifkan Tombol F12 dan Kombinasi Keyboard Tertentu
+        document.addEventListener('keydown', function(e) {
+            // Mencegah tombol F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+
+            // Mencegah Ctrl+Shift+I (Inspect Element)
+            // Mencegah Ctrl+Shift+J (Console)
+            // Mencegah Ctrl+Shift+C (Inspect Element Mode)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault();
+            }
+
+            // Mencegah Ctrl+U (View Source)
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+<body>
+
+    <!-- Form Login -->
+    <div class="login-container" id="login-box">
+        <h2><p>Akses Terbatas</p><p>Sukses TKA Menuju Sekolah Impian</p></h2>
+        <p>Masukkan kode akses Anda. Setiap kode hanya dapat diklaim dan digunakan oleh 1 perangkat/pengunjung saja.</p>
+        <div class="input-group">
+            <input type="text" id="accessCode" placeholder="KODE-ANDA (8 karakter)" autocomplete="off">
+        </div>
+        <button onclick="verifyCode()">Masuk ke Halaman</button>
+        <div class="error-msg" id="errorMsg">Kode tidak valid atau sudah diklaim oleh perangkat lain!</div>
+    </div>
+
+    <!-- Halaman Rahasia / Dashboard -->
+    <div id="secret-page">
+        <h1>Selamat Datang! Sukses TKA</h1>
+	<h1>MENUJU SEKOLAH IMPIAN</H1>
+        <p><b>Anda berhasil masuk menggunakan kode unik Anda.</b></p>
+        <div class="code-info">Kode Aktif: <span id="activeCodeDisplay">-</span></div>
+        <p>Anda dapat keluar (logout) kapan saja dan masuk kembali menggunakan perangkat ini dengan kode yang sama.</p>
+        <p><a href="https://nafiszain90-gif.github.io/tka/sd/"><button> Akses Sukses TKA (Memulai Latihan)</button></a></p>
+	<button class="logout-btn" onclick="logout()">Keluar (Logout)</button>
+    </div>
+
+    <script>
+        // Simulasi Database Kode yang valid
+        const validCodes = {
+           "K9P2X4W8": true,
+			"M7R3A1V9": true,
+			"B5Y8Z2K6": true,
+			"H4L9T3Q1": true,
+			"V6N1S5J7": true,
+			"F3G8D2K9": true,
+			"X6R1P5W7": true,
+			"L4M9B2V8": true,
+			"H7Z3Q1N5": true,
+			"T2K8J4C9": true,
+
+        };
+
+        // Saat halaman dimuat, cek apakah sesi aktif saat ini ada di browser ini
+        window.onload = function() {
+            const currentActiveCode = sessionStorage.getItem("activeSessionCode");
+            if (currentActiveCode) {
+                // Jika sudah ada sesi aktif di tab/browser ini, langsung tampilkan halaman rahasia
+                showSecretPage(currentActiveCode);
+            }
+        };
+
+        function verifyCode() {
+            const inputCode = document.getElementById("accessCode").value.trim().toUpperCase();
+            const errorMsg = document.getElementById("errorMsg");
+
+            // Cek apakah kode valid di sistem
+            if (!validCodes[inputCode]) {
+                showError("Kode tidak terdaftar / tidak valid!");
+                return;
+            }
+
+            // Cek apakah kode ini sudah pernah diklaim oleh perangkat LAIN (tersimpan di localStorage global)
+            const globalOwner = localStorage.getItem("owner_" + inputCode);
+            // Buat ID unik untuk perangkat ini (jika belum ada)
+            let myDeviceId = localStorage.getItem("myDeviceId");
+            if (!myDeviceId) {
+                myDeviceId = 'device_' + Math.random().toString(36).substring(2, 15);
+                localStorage.setItem("myDeviceId", myDeviceId);
+            }
+
+            if (globalOwner && globalOwner !== myDeviceId) {
+                // Jika kode sudah diklaim oleh perangkat lain
+                showError("Kode ini sudah digunakan oleh pengunjung/perangkat lain!");
+                return;
+            }
+
+            // Jika belum diklaim atau diklaim oleh perangkat ini sendiri:
+            // 1. Klaim kepemilikan kode secara permanen untuk perangkat ini
+            localStorage.setItem("owner_" + inputCode, myDeviceId);
+
+            // 2. Simpan sesi aktif di sessionStorage (bisa hilang jika tab ditutup total atau saat logout manual)
+            sessionStorage.setItem("activeSessionCode", inputCode);
+
+            // 3. Tampilkan halaman rahasia
+            showSecretPage(inputCode);
+        }
+
+        function showSecretPage(code) {
+            document.getElementById("login-box").style.display = "none";
+            document.getElementById("secret-page").style.display = "block";
+            document.getElementById("activeCodeDisplay").innerText = code;
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.innerText = message;
+            errorMsg.style.display = "block";
+            document.getElementById("accessCode").value = "";
+        }
+
+        function logout() {
+            // Hapus sesi aktif, tapi JANGAN hapus klaim kepemilikan perangkat (`localStorage`)
+            // agar perangkat ini masih bisa masuk lagi menggunakan kode yang sama.
+            sessionStorage.removeItem("activeSessionCode");
+            
+            // Muat ulang halaman kembali ke menu login
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
